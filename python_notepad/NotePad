@@ -1,0 +1,282 @@
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5 import uic
+from PyQt5.QtGui import QTextCursor
+from PyQt5 import QtCore
+
+
+import requests
+def summarize_request(text):
+    url="http://localhost:11434/api/generate"
+    data={  "model": "llama3.1",
+            "prompt": f"다음 글을 핵심만 요약해주세요:\n{text}",
+            "stream": False
+         }   
+    r=requests.post(url, json=data)
+    return r.json()["response"]
+    
+def translator_request(text,language):
+    url="http://localhost:11434/api/generate"
+    data={  "model": "llama3.1",
+            "prompt": f"다음 글을 {language}로 번역해 주세요:\n{text}",
+            "stream": False
+         }   
+    r=requests.post(url, json=data)
+    return r.json()["response"]
+
+form_class=uic.loadUiType("..\\python_notepad\\NotePad.ui")[0]
+
+class findWindow(QDialog):
+    def __init__(self, parent):
+        super(findWindow, self).__init__(parent)
+        uic.loadUi("..\\python_notepad\\find.ui",self)
+        self.show()
+        self.parent=parent
+        self.cursor=parent.plainTextEdit.textCursor()
+        self.pe=parent.plainTextEdit
+
+        self.pushButton_findnext.clicked.connect(self.findNext)
+        self.pushButton_cancle.clicked.connect(self.close)
+
+        self.radioButton_down.clicked.connect(self.updown_radio_button)
+        self.radioButton_up.clicked.connect(self.updown_radio_button)
+        self.up_down="down"
+
+    def updown_radio_button(self):
+        if self.radioButton_up.isChecked():
+            self.up_down="up"
+            print("up")
+        if self.radioButton_down.isChecked():
+            self.up_down="down"
+            print("down")
+
+    def setCursor(self,start,end):
+        print(self.cursor.selectionStart(), self.cursor.selectionEnd())
+        self.cursor.setPosition(start) #앞에 커서를 찍음
+        self.cursor.movePosition(QTextCursor.Right, QTextCursor.KeepAnchor, end-start) #뒤로 커서를 움직임
+        self.pe.setTextCursor(self.cursor)
+
+    def notFoundMessage(self,pattern):
+        msgBox=QMessageBox()
+        msgBox.setWindowTitle('메모장')
+        msgBox.setIcon(QMessageBox.Information)
+        msgBox.setText('''"{}"을(를) 찾을 수 없습니다.'''.format(pattern))
+        msgBox.addButton('확인',QMessageBox.YesRole)
+        ret=msgBox.exec_() 
+
+    def findNext(self):
+           
+        pattern=self.lineEdit.text()
+        text=self.pe.toPlainText()
+        reg=QtCore.QRegExp(pattern)
+        self.cursor=self.parent.plainTextEdit.textCursor()
+        #대소문자인지
+        if self.checkBox_CaseSen.isChecked():
+            cs=QtCore.Qt.CaseSensitive  #민감 
+        
+        else:
+            cs=QtCore.Qt.CaseInsensitive    #민감X
+
+       
+        reg.setCaseSensitivity(cs)
+        pos=self.cursor.position()
+       
+        
+        if self.up_down=="down":
+            index=reg.indexIn(text,pos) #검색하기
+        else:
+            pos-=len(pattern)+1
+            index=reg.lastIndexIn(text,pos)
+            
+        if (index!=-1) and (pos>-1): #검색된 결과가 있다면..
+            self.setCursor(index,len(pattern)+index)
+        else:
+            self.notFoundMessage(pattern)
+            
+    def keyReleaseEvent(self,event):
+        if self.lineEdit.text():
+            self.pushButton_findnext.setEnabled(True)
+        else:
+            self.pushButton_findnext.setEnabled(False)
+    
+
+class WindowClass(QMainWindow, form_class):
+    def __init__(self):
+        super().__init__()
+        self.language = ""
+        self.setupUi(self)
+        #파일
+        self.action_open_2.triggered.connect(self.openFunction)
+        self.action_save.triggered.connect(self.saveFunction)
+        self.action_ai.triggered.connect(self.ai_tab_toggle)
+        self.action_saveas.triggered.connect(self.saveAsFunction)
+
+        #편집
+        self.action_undo.triggered.connect(self.undoFunction)
+        self.action_cut.triggered.connect(self.cutFunction)
+        self.action_copy.triggered.connect(self.copyFunction)
+        self.action_paste.triggered.connect(self.pasteFunction)
+
+        self.action_find.triggered.connect(self.findFunction)
+    
+        #ai기능
+        self.summaryButton.clicked.connect(self.on_summary_clicked)
+        self.translatorButton.clicked.connect(self.on_translate_clicked)
+
+        #한국어->영어
+        self.radioButton.clicked.connect(self.setLanguageEnglish)
+        self.radioButton_2.clicked.connect(self.setLanguageKorea)
+
+        #닫기
+        self.action_close.triggered.connect(self.close)
+
+        #ai tab 닫아놓기
+        self.tabContainer.setVisible(False)
+        self.opened=False
+        self.opened_file_path='제목 없음'
+
+    def findFunction(self):
+        findWindow(self)
+
+    def undoFunction(self):
+        self.plainTextEdit.undo()
+
+    def cutFunction(self):
+        self.plainTextEdit.cut()
+    def copyFunction(self):
+        self.plainTextEdit.copy()
+    def pasteFunction(self):
+        self.plainTextEdit.paste()
+
+    def save_changed_data(self):
+        msgBox=QMessageBox()
+        msgBox.setText("변경 내용을 {}에 저장하시겠습니까".format(self.opened_file_path))
+        msgBox.addButton('저장', QMessageBox.YesRole) #0
+        msgBox.addButton('저장 안 함', QMessageBox.NoRole) #1
+        msgBox.addButton('취소', QMessageBox.RejectRole) #2
+        ret=msgBox.exec_()
+        if ret ==0:
+            self.saveFunction()
+        else:
+            return ret
+       
+    def ischanged(self):
+        if not self.opened:
+            if self.plainTextEdit.toPlainText().strip():
+                return True
+            return False
+        
+        current_data=self.plainTextEdit.toPlainText() # 현재 데이터
+        #파일에 저장된 데이터
+        with open(self.opened_file_path, encoding='UTF8') as f:
+            file_data=f.read()
+
+        if current_data==file_data:
+            return False
+        else:
+            return True
+
+    
+    def closeEvent(self,event):
+        if self.ischanged: #열린 적이 있고 변경사항이 있으면
+           ret=self.save_changed_data()
+        
+        if ret==2:
+           event.ignore()
+       
+
+
+        
+
+    def setLanguageEnglish(self):
+        self.language= "영어"
+        return self.language
+    
+    def setLanguageKorea(self):
+        self.language= "한국어"
+        return self.language
+    
+    def on_translate_clicked(self):
+        #텍스트가 없거나 언어 미선택 시
+        text=self.plainTextEdit.toPlainText().strip()
+
+        if not self.language or not text:
+            QMessageBox.warning(
+                self,
+                "경고",
+                "번역할 언어를 선택해 주세요."
+            )
+            return 
+        text = self.plainTextEdit.toPlainText()
+
+        summary = translator_request(text,self.language)
+
+        self.textBrowser_2.setText(summary)
+
+        self.tabContainer.setVisible(True)
+
+    def on_summary_clicked(self):
+        text=self.plainTextEdit.toPlainText().strip()
+
+        if not self.language or not text:
+            QMessageBox.warning(
+                self,
+                "경고",
+                "요약할 내용을 작성해 주세요."
+            )
+            return 
+        text = self.plainTextEdit.toPlainText()
+
+        summary = summarize_request(text)
+
+        self.textBrowser.setText(summary)
+
+        self.tabContainer.setVisible(True)
+
+    def ai_tab_toggle(self):
+        self.tabContainer.setVisible(
+        not self.tabContainer.isVisible()
+    )
+
+  
+    def open_file(self,fname):
+            
+        with open(fname, encoding='UTF8') as f:
+            data =f.read()
+        self.plainTextEdit.setPlainText(fname)
+        self.opened=True
+        self.opened_file_path=fname
+
+    def save_file(self,fname):
+        data=self.plainTextEdit.toPlainText()
+        with open(fname, 'w', encoding='UTF8') as f:
+            f.write(data)
+        self.opened=True
+        self.opened_file_path=fname
+
+    def openFunction(self):
+        if self.ischanged():
+            ret=self.save_changed_data()
+
+        fname=QFileDialog.getOpenFileName(self)
+        if fname[0]:
+            self.open_file(fname[0])
+        
+    def saveFunction(self):
+        
+        if self.opened:
+            self.save_file(self.opened_file_path)
+        else:
+            self.saveAsFunction()
+       
+
+    def saveAsFunction(self):
+        fname=QFileDialog.getSaveFileName(self)
+        if fname[0]:
+            self.save_file(fname[0])
+
+app=QApplication(sys.argv)
+mainWindow=WindowClass()
+mainWindow.show()
+app.exec_()
+

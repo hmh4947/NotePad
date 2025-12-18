@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>814</width>
+    <height>531</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>메모장</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_6">
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,1">
+      <item>
+       <widget class="QPlainTextEdit" name="plainTextEdit"/>
+      </item>
+      <item>
+       <widget class="QWidget" name="tabContainer" native="true">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="gridLayout_4">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QTabWidget" name="tabWidget">
+             <property name="currentIndex">
+              <number>1</number>
+             </property>
+             <widget class="QWidget" name="tab_summary">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <attribute name="title">
+               <string>요약</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout">
+               <item row="0" column="0">
+                <widget class="QTextBrowser" name="textBrowser"/>
+               </item>
+               <item row="1" column="0">
+                <widget class="QPushButton" name="summaryButton">
+                 <property name="text">
+                  <string>요약하기</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="tab_4">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <attribute name="title">
+               <string>번역</string>
+              </attribute>
+              <layout class="QVBoxLayout" name="verticalLayout">
+               <item>
+                <layout class="QGridLayout" name="gridLayout_2">
+                 <item row="0" column="0">
+                  <widget class="QRadioButton" name="radioButton">
+                   <property name="enabled">
+                    <bool>true</bool>
+                   </property>
+                   <property name="mouseTracking">
+                    <bool>true</bool>
+                   </property>
+                   <property name="tabletTracking">
+                    <bool>false</bool>
+                   </property>
+                   <property name="text">
+                    <string>한국어-&gt;영어</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QTextBrowser" name="textBrowser_2">
+                   <property name="enabled">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QPushButton" name="translatorButton">
+                   <property name="text">
+                    <string>번역하기</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QRadioButton" name="radioButton_2">
+                   <property name="text">
+                    <string>영어-&gt;한국어</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>814</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>파일</string>
+    </property>
+    <addaction name="action_open_2"/>
+    <addaction name="action_save"/>
+    <addaction name="action_saveas"/>
+    <addaction name="action_close"/>
+   </widget>
+   <widget class="QMenu" name="menu_edit">
+    <property name="title">
+     <string>편집</string>
+    </property>
+    <addaction name="action_undo"/>
+    <addaction name="separator"/>
+    <addaction name="action_cut"/>
+    <addaction name="action_copy"/>
+    <addaction name="action_paste"/>
+    <addaction name="separator"/>
+    <addaction name="action_find"/>
+    <addaction name="action_next_find"/>
+    <addaction name="action_prev_find"/>
+    <addaction name="action_find_replace"/>
+    <addaction name="action_go"/>
+    <addaction name="separator"/>
+    <addaction name="action_all_select"/>
+    <addaction name="action_datetime"/>
+   </widget>
+   <widget class="QMenu" name="menu_view">
+    <property name="title">
+     <string>보기</string>
+    </property>
+    <widget class="QMenu" name="menu_3">
+     <property name="title">
+      <string>확대하기/축소하기</string>
+     </property>
+     <addaction name="action_zoom_in_2"/>
+     <addaction name="action_zoom_out_2"/>
+    </widget>
+    <addaction name="action_ai"/>
+    <addaction name="menu_3"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>서식</string>
+    </property>
+    <addaction name="action_wrap"/>
+    <addaction name="action_font"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>도움말</string>
+    </property>
+    <addaction name="action_help"/>
+    <addaction name="action_info"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_edit"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_view"/>
+   <addaction name="menu_4"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actiontoxoq">
+   <property name="text">
+    <string>다른 이름으로 저장</string>
+   </property>
+  </action>
+  <action name="action_open">
+   <property name="text">
+    <string>새 창</string>
+   </property>
+  </action>
+  <action name="action_Markdown">
+   <property name="text">
+    <string>새 Markdown 탭</string>
+   </property>
+  </action>
+  <action name="action_open_2">
+   <property name="text">
+    <string>열기</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionchlrms">
+   <property name="text">
+    <string>최근</string>
+   </property>
+  </action>
+  <action name="actionwjwkd">
+   <property name="text">
+    <string>wjwkd</string>
+   </property>
+  </action>
+  <action name="action_save">
+   <property name="text">
+    <string>저장</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionekfmsdl">
+   <property name="text">
+    <string>다른 이름으로 저장</string>
+   </property>
+  </action>
+  <action name="actionxoq">
+   <property name="text">
+    <string>탭 닫기</string>
+   </property>
+  </action>
+  <action name="actiond">
+   <property name="text">
+    <string>창 닫기</string>
+   </property>
+  </action>
+  <action name="actiond_2">
+   <property name="text">
+    <string>종료</string>
+   </property>
+  </action>
+  <action name="action_toggle">
+   <property name="text">
+    <string>toggle</string>
+   </property>
+  </action>
+  <action name="action_ai">
+   <property name="text">
+    <string>AI 기능</string>
+   </property>
+  </action>
+  <action name="action_saveas">
+   <property name="text">
+    <string>다른 이름으로 저장</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="action_close">
+   <property name="text">
+    <string>닫기</string>
+   </property>
+  </action>
+  <action name="action_undo">
+   <property name="text">
+    <string>실행 취소</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_cut">
+   <property name="text">
+    <string>잘라내기</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="action_copy">
+   <property name="text">
+    <string>복사</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="action_paste">
+   <property name="text">
+    <string>붙여넣기</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="action_find">
+   <property name="text">
+    <string>찾기</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="action_next_find">
+   <property name="text">
+    <string>다음 찾기</string>
+   </property>
+   <property name="shortcut">
+    <string>F3</string>
+   </property>
+  </action>
+  <action name="action_prev_find">
+   <property name="text">
+    <string>이전 찾기</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+F3</string>
+   </property>
+  </action>
+  <action name="action_find_replace">
+   <property name="text">
+    <string>바꾸기</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
+   </property>
+  </action>
+  <action name="action_go">
+   <property name="text">
+    <string>이동</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="action_all_select">
+   <property name="text">
+    <string>모두 선택</string>
+   </property>
+  </action>
+  <action name="action_datetime">
+   <property name="text">
+    <string>시간/날짜</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="action_wrap">
+   <property name="text">
+    <string>자동 줄바꿈</string>
+   </property>
+  </action>
+  <action name="action_font">
+   <property name="text">
+    <string>글꼴</string>
+   </property>
+  </action>
+  <action name="action_zoom_out">
+   <property name="text">
+    <string>dd</string>
+   </property>
+  </action>
+  <action name="action_zoom_in_2">
+   <property name="text">
+    <string>확대</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+=</string>
+   </property>
+  </action>
+  <action name="action_zoom_out_2">
+   <property name="text">
+    <string>축소</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="action_help">
+   <property name="text">
+    <string>도움말 보기</string>
+   </property>
+  </action>
+  <action name="action_info">
+   <property name="text">
+    <string>메모장 정보</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
