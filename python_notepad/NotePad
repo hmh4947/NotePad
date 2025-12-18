@@ -199,8 +199,6 @@ class WindowClass(QMainWindow,form_class):
         if ret==2:
            event.ignore()
        
-
-
         
 
     def setLanguageEnglish(self):
@@ -257,15 +255,8 @@ class WindowClass(QMainWindow,form_class):
     def open_file(self,fname):
             
         with open(fname, encoding='UTF8') as f:
-            data =f.read()
-        self.plainTextEdit.setPlainText(fname)
-        self.opened=True
-        self.opened_file_path=fname
-
-    def save_file(self,fname):
-        data=self.plainTextEdit.toPlainText()
-        with open(fname, 'w', encoding='UTF8') as f:
-            f.write(data)
+            data = f.read()
+        self.plainTextEdit.setPlainText(data)
         self.opened=True
         self.opened_file_path=fname
 
@@ -276,6 +267,15 @@ class WindowClass(QMainWindow,form_class):
         fname=QFileDialog.getOpenFileName(self)
         if fname[0]:
             self.open_file(fname[0])
+
+    def save_file(self,fname):
+        data=self.plainTextEdit.toPlainText(data)
+        with open(fname, 'w', encoding='UTF8') as f:
+            f.write(data)
+        self.opened=True
+        self.opened_file_path=fname
+
+
         
     def saveFunction(self):
         
