@@ -40,6 +40,7 @@ def translator_request(text,language):
 
 form_class=uic.loadUiType("..\\python_notepad\\NotePad.ui")[0]
 form_class2=uic.loadUiType("..\\python_notepad\\find.ui")[0]
+
 class findWindow(QDialog,form_class2):
     def __init__(self, parent):
         super(findWindow, self).__init__(parent)
@@ -49,7 +50,7 @@ class findWindow(QDialog,form_class2):
         self.parent=parent
         self.cursor=parent.plainTextEdit.textCursor()
         self.pe=parent.plainTextEdit
-
+        self.setWindowTitle('찾기')
         self.pushButton_findnext.clicked.connect(self.findNext)
         self.pushButton_cancle.clicked.connect(self.close)
 
@@ -165,6 +166,7 @@ class WindowClass(QMainWindow,form_class):
 
     def save_changed_data(self):
         msgBox=QMessageBox()
+        msgBox.setWindowTitle('저장')
         msgBox.setText("변경 내용을 {}에 저장하시겠습니까".format(self.opened_file_path))
         msgBox.addButton('저장', QMessageBox.YesRole) #0
         msgBox.addButton('저장 안 함', QMessageBox.NoRole) #1
@@ -231,7 +233,7 @@ class WindowClass(QMainWindow,form_class):
     def on_summary_clicked(self):
         text=self.plainTextEdit.toPlainText().strip()
 
-        if not self.language or not text:
+        if not text:
             QMessageBox.warning(
                 self,
                 "경고",
@@ -269,7 +271,7 @@ class WindowClass(QMainWindow,form_class):
             self.open_file(fname[0])
 
     def save_file(self,fname):
-        data=self.plainTextEdit.toPlainText(data)
+        data=self.plainTextEdit.toPlainText()
         with open(fname, 'w', encoding='UTF8') as f:
             f.write(data)
         self.opened=True
