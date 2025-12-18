@@ -1,11 +1,25 @@
 import sys
+import PyQt5
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5.QtGui import QTextCursor
 from PyQt5 import QtCore
-
-
 import requests
+import os
+
+from PyQt5.QtWidgets import QApplication
+
+
+os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = \
+    os.path.join(
+        os.path.dirname(PyQt5.__file__),
+        "Qt5",
+        "plugins",
+        "platforms"
+    )
+
+
+
 def summarize_request(text):
     url="http://localhost:11434/api/generate"
     data={  "model": "llama3.1",
@@ -25,11 +39,12 @@ def translator_request(text,language):
     return r.json()["response"]
 
 form_class=uic.loadUiType("..\\python_notepad\\NotePad.ui")[0]
-
-class findWindow(QDialog):
+form_class2=uic.loadUiType("..\\python_notepad\\find.ui")[0]
+class findWindow(QDialog,form_class2):
     def __init__(self, parent):
         super(findWindow, self).__init__(parent)
-        uic.loadUi("..\\python_notepad\\find.ui",self)
+     
+        self.setupUi(self)
         self.show()
         self.parent=parent
         self.cursor=parent.plainTextEdit.textCursor()
@@ -100,7 +115,7 @@ class findWindow(QDialog):
             self.pushButton_findnext.setEnabled(False)
     
 
-class WindowClass(QMainWindow, form_class):
+class WindowClass(QMainWindow,form_class):
     def __init__(self):
         super().__init__()
         self.language = ""
